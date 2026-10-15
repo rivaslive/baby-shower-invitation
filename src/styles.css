@@ -118,6 +118,38 @@ a {
   padding: 24px 16px;
 }
 
+/* ───────────── Carga inicial ───────────── */
+
+.loader {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: grid;
+  place-items: center;
+  background: var(--paper);
+}
+
+.loader-star {
+  font-size: 34px;
+  color: var(--gold);
+  animation: loader-spin 1.4s ease-in-out infinite;
+}
+
+@keyframes loader-spin {
+  0% {
+    transform: rotate(0) scale(0.8);
+    opacity: 0.5;
+  }
+  50% {
+    transform: rotate(180deg) scale(1.15);
+    opacity: 1;
+  }
+  100% {
+    transform: rotate(360deg) scale(0.8);
+    opacity: 0.5;
+  }
+}
+
 /* ───────────── Tarjeta ───────────── */
 
 .invite-wrap {

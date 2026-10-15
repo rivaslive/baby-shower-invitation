@@ -1,9 +1,11 @@
+import { AnimatePresence, motion } from 'framer-motion'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import InvitationCard from '../components/InvitationCard.jsx'
 import Page from '../components/Page.jsx'
 import SupportBox from '../components/SupportBox.jsx'
 import { actions } from '../lib/api.js'
+import { useAssetsReady } from '../lib/preload.js'
 
 // Cuenta una sola visita por sesión del navegador (no cada recarga)
 const viewedKey = (code) => `viewed:${code}`
@@ -22,6 +24,7 @@ export default function InvitationPage() {
   const navigate = useNavigate()
   const [invite, setInvite] = useState(null)
   const [error, setError] = useState(null)
+  const assetsReady = useAssetsReady()
 
   useEffect(() => {
     if (!code) return
@@ -57,9 +60,23 @@ export default function InvitationPage() {
 
   return (
     <Page className="page-invite">
+      <AnimatePresence>
+        {!assetsReady && (
+          <motion.div
+            key="loader"
+            className="loader"
+            initial={{ opacity: 1 }}
+            exit={{ opacity: 0, transition: { duration: 0.4 } }}
+            role="status"
+            aria-label="Cargando invitación"
+          >
+            <span className="loader-star">★</span>
+          </motion.div>
+        )}
+      </AnimatePresence>
       <div className="invite-wrap">
         <InvitationCard
-          play
+          play={assetsReady}
           cta={cta}
           ctaDone={!!confirmed?.attending}
           onConfirm={() => navigate(code ? `/i/${code}/confirmar` : '/confirmar')}
