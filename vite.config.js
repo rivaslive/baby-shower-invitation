@@ -2,6 +2,7 @@ import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
 import { existsSync } from 'node:fs'
 import { resolve } from 'node:path'
+import { adapt } from './server/adapter.js'
 
 // En desarrollo ejecuta las funciones de /api igual que lo hace Vercel en producción.
 function apiDevServer() {
@@ -13,20 +14,12 @@ function apiDevServer() {
         const url = new URL(req.url, 'http://localhost')
         const name = url.pathname.slice('/api/'.length).replace(/\/$/, '')
         const file = resolve(server.config.root, 'api', `${name}.js`)
-        res.status = (code) => ((res.statusCode = code), res)
-        res.json = (data) => {
-          res.setHeader('Content-Type', 'application/json; charset=utf-8')
-          res.end(JSON.stringify(data))
-        }
         if (!/^[a-z0-9/-]+$/.test(name) || !existsSync(file)) {
-          return res.status(404).json({ error: 'Ruta no encontrada' })
+          res.statusCode = 404
+          return res.end(JSON.stringify({ error: 'Ruta no encontrada' }))
         }
         try {
-          req.query = Object.fromEntries(url.searchParams)
-          const chunks = []
-          for await (const chunk of req) chunks.push(chunk)
-          const raw = Buffer.concat(chunks).toString('utf8')
-          req.body = raw ? JSON.parse(raw) : {}
+          await adapt(req, res, url)
           const mod = await server.ssrLoadModule(file)
           await mod.default(req, res)
         } catch (err) {

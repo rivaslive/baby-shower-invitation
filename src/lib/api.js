@@ -7,10 +7,13 @@ async function request(path, { method = 'GET', body, adminKey } = {}) {
     },
     body: body ? JSON.stringify(body) : undefined,
   })
-  const data = await res.json().catch(() => ({}))
-  if (!res.ok) {
-    const err = new Error(data.error || 'Algo salió mal, intenta de nuevo')
-    err.status = res.status
+  const isJson = res.headers.get('content-type')?.includes('application/json')
+  const data = isJson ? await res.json().catch(() => ({})) : {}
+  if (!res.ok || !isJson) {
+    const err = new Error(
+      data.error || (isJson ? 'Algo salió mal, intenta de nuevo' : 'El servidor no respondió correctamente'),
+    )
+    err.status = res.ok ? 502 : res.status
     throw err
   }
   return data
