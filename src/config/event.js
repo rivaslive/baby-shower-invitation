@@ -9,7 +9,7 @@ export const EVENT = {
   endsAt: '2026-11-15T00:30:00Z',
   placeLines: ['Cuadra Alas,', 'Barrio La Primavera'],
   placeQuery: 'Cuadra Alas, Barrio La Primavera',
-  location: { lat: 14.187994, lng: -89.148504 },
+  location: { lat: 14.188418, lng: -89.148769 },
   supportPhone: '7235-2158',
   supportWhatsApp: '50372352158',
 }
