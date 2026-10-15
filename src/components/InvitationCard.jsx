@@ -1,5 +1,5 @@
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
-import { EVENT } from '../config/event.js'
+import { EVENT, mapsUrl } from '../config/event.js'
 import { boxOf, X, Y } from '../lib/layers.js'
 import Sparkle from './Sparkle.jsx'
 
@@ -260,6 +260,15 @@ export default function InvitationCard({ play = true, onConfirm, cta = ['Confirm
             </At>
           </div>
         ))}
+
+        <a
+          className="place-link"
+          href={mapsUrl}
+          target="_blank"
+          rel="noreferrer"
+          aria-label={`Ver ubicación: ${EVENT.placeLines.join(' ')}`}
+          style={{ left: X(617), top: Y(905), width: X(270), height: Y(195) }}
+        />
 
         {/* Botón de confirmación */}
         <motion.div

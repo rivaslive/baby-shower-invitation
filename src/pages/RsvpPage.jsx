@@ -2,9 +2,10 @@ import confetti from 'canvas-confetti'
 import { AnimatePresence, motion, useAnimationControls } from 'framer-motion'
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
+import MapCard from '../components/MapCard.jsx'
 import Page from '../components/Page.jsx'
 import SupportBox from '../components/SupportBox.jsx'
-import { EVENT, mapsUrl } from '../config/event.js'
+import { EVENT } from '../config/event.js'
 import { actions } from '../lib/api.js'
 import { downloadIcs, googleCalendarUrl } from '../lib/calendar.js'
 
@@ -295,9 +296,6 @@ function Done({ invite, onEdit }) {
           <button type="button" className="chip" onClick={downloadIcs}>
             🍎 Calendario iPhone
           </button>
-          <a className="chip" href={mapsUrl} target="_blank" rel="noreferrer">
-            📍 Cómo llegar
-          </a>
         </motion.div>
       )}
 
@@ -400,6 +398,14 @@ export default function RsvpPage() {
             )}
           </AnimatePresence>
         </motion.section>
+
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: EASE, delay: 0.35 }}
+        >
+          <MapCard />
+        </motion.div>
 
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }}>
           <SupportBox />

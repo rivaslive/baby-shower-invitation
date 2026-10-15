@@ -27,6 +27,7 @@ export function downloadIcs() {
     `DTEND:${stamp(EVENT.endsAt)}`,
     `SUMMARY:${title}`,
     `LOCATION:${location}`,
+    `GEO:${EVENT.location.lat};${EVENT.location.lng}`,
     'BEGIN:VALARM',
     'TRIGGER:-PT3H',
     'ACTION:DISPLAY',
